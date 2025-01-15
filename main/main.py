@@ -22,12 +22,13 @@ def load_data():
     need to import the data manually from the /data folder
     return: pandas dataframe'''
     try:
-        dataframe = fetch_ucirepo(id=45)
+        dataframe = fetch_ucirepo(id=1005)
         Logger.info('Function call load_data was successfull')
         Logger.debug('Heart disease data has been loaded')
         Logger.warning('Id might change in future ucimlrepo versions')
-    except:
-        Logger.error('Heart disease data could not be loaded')
+    except Exception as e:
+        Logger.error('Data could not be loaded, Exception: {}'.format(e))
+        dataframe = None
 
     return dataframe
 
