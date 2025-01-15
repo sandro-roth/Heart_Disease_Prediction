@@ -2,8 +2,10 @@
 # - Logging functions
 
 from .logs import MakeLogger
+from .yaml import YamlHandler
 
 # To import all modules/functions at once use the *
 __all__ = (
-    MakeLogger
+    MakeLogger,
+    YamlHandler
 )
