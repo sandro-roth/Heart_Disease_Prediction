@@ -1,0 +1,8 @@
+# This document will hold all parameter. Mainly parameter for the respective Machinlearning
+# algorithm/model
+---
+'lin_reg':
+  'para1': 14
+
+'Cluster':
+  'para1': 2
