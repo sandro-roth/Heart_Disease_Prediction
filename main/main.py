@@ -2,7 +2,7 @@
 import os
 
 # Installed pip modules
-
+from ucimlrepo import fetch_ucirepo
 
 # Own created modules
 from utils import MakeLogger
@@ -17,6 +17,20 @@ p_file_path = os.path.join(settings_path, 'parameter.yml')
 parameter = yhadl.loader(p_file_path)
 
 
+def load_data():
+    '''This function fetches data directly from the module ucimlrepo. Therefore there is no
+    need to import the data manually from the /data folder
+    return: pandas dataframe'''
+    try:
+        dataframe = fetch_ucirepo(id=45)
+        Logger.info('Function call load_data was successfull')
+        Logger.debug('Heart disease data has been loaded')
+        Logger.warning('Id might change in future ucimlrepo versions')
+    except:
+        Logger.error('Heart disease data could not be loaded')
+
+    return dataframe
+
 
 
 
@@ -29,4 +43,4 @@ parameter = yhadl.loader(p_file_path)
 
 
 if __name__ == '__main__':
-    pass
+    df = load_data()
