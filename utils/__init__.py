@@ -3,9 +3,11 @@
 
 from .logs import MakeLogger
 from .yaml import YamlHandler
+from .decorators import memorizer
 
 # To import all modules/functions at once use the *
 __all__ = (
     MakeLogger,
-    YamlHandler
+    YamlHandler,
+    memorizer
 )
