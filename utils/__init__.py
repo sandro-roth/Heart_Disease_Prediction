@@ -4,6 +4,7 @@
 from .logs import MakeLogger
 from .yaml import YamlHandler
 from .decorators import memorizer
+from .preprocessing import PreProcessor
 
 # To import all modules/functions at once use the *
 __all__ = (
