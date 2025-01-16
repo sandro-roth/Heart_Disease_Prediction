@@ -1,4 +1,4 @@
-# This document will hold all parameter. Mainly parameter for the respective Machinlearning
+# This document will hold all parameter. Mainly parameter for the respective machine learning
 # algorithm/model
 ---
 'lin_reg':
@@ -14,6 +14,14 @@
     'cp': [1, 4]
     'trestbps': [60, 220]
     'chol': [50, 600]
+    'fbs': [0, 1]
+    'restecg': [0, 2]
+    'thalach': [50, 250]
+    'exang': [0, 1]
+    'oldpeak': [0, 10]
+    'slope': [1, 3]
+    'ca': [0, 3]
+    'thal': [3, 7]
 
   'f_type_d':
     'age': 'int'
@@ -21,3 +29,11 @@
     'cp': 'category'
     'trestbps': 'int'
     'chol': 'int'
+    'fbs': 'category'
+    'restecg': 'category'
+    'thalach': 'int'
+    'exang': 'category'
+    'oldpeak': 'float'
+    'slope': 'category'
+    'ca': 'int'
+    'thal': 'category'
