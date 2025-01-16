@@ -42,33 +42,42 @@ def preprocessing(data):
     # Check for full duplicates in the X_data
     try:
         assert len(X_data[X_data.duplicated()]) == 0
+        Logger.info('There are no full duplicates in the dataset!\n')
     except AssertionError:
         Logger.error('There are duplicates in the dataset which need to be handled first')
         raise ValueError
 
+    print(X_data['chol'].min())
+    print(X_data['chol'].max())
+    print(X_data['chol'].value_counts().sort_index())
     flag_dict = {}
-    pos_val_dict = {'age': list(range(0, 101)), 'sex': [0,1], 'cp': ['test']}
-    pos_type_dict = {'age': int, 'sex': int}
+    f_val_d = parameter['preprocessing']['f_val_d']
+    f_type_d = parameter['preprocessing']['f_type_d']
+    # Remove SettingWithCopyWarnings for the dtype part setting
+    pd.options.mode.chained_assignment = None
     for i in X_data.columns:
-        Logger.info('Checking feature "{}" for missing or wrong values and type'.format(i))
-        assert X_data[i].isna().sum() == 0
-        assert X_data[i].dtype == pos_type_dict[i]
-        Logger.info('Type of feature is correct and there are no missing values')
-        assert set(X_data[i].value_counts().sort_index().index.to_list()).issubset(pos_val_dict[i])
-        Logger.info('Only valid values were used for the feature: {}\n'.format(i))
-        if i == 'sex':
-            break
-    # Check age column if there is any missing value
-    #Logger.info('Checking feature "age" for missing or wrong values and type')
-    #Logger.info('Number of missing values {} and type of feature: {}'.format(X_data['age'].isna().sum(), X_data['age'].dtype))
-    #Logger.info('Check for valid values of "age" {}\n'.format(X_data['age'].value_counts().sort_index().index.to_list()))
+        try:
+            Logger.info('Checking feature "{}" for missing or wrong values and type'.format(i))
+            assert X_data[i].isna().sum() == 0
+            assert X_data[i].between(*f_val_d[i]).all() == 1
+            # assert set(X_data[i].value_counts().sort_index().index.to_list()).issubset(f_val_d[i])
+            Logger.info('Only valid values were used for the feature: {}\n'.format(i))
+            #X_data[i] = X_data.loc[:, i].astype(f_type_d[i])
+            X_data[i] = X_data[i].astype(f_type_d[i])
+            assert X_data[i].dtype == f_type_d[i]
+            Logger.info('Type of feature is correct and there are no missing values')
 
-    # Check feature sex if there is any missing value
-    #Logger.info('Checking feature "sex" for missing or wrong values and type')
-    #Logger.info('Number of missing values {} and type of feature: {}'.format(X_data['sex'].isna().sum(), X_data['sex'].dtype))
-    #Logger.info('Check for valid values of "sex" {}\n'.format(X_data['sex'].value_counts().sort_index().index.to_list()))
 
-    # Check feature cp
+            if i == 'trestbps':
+                break
+
+        except AssertionError:
+            print('Let me see which error it is!')
+            print(X_data[i].dtype)
+
+    pd.options.mode.chained_assignment = 'warn'
+    print(X_data['age'].dtype, X_data['sex'].dtype, X_data['cp'].dtype, X_data['trestbps'].dtype) # --> Delete!
+
 
 
 
@@ -81,5 +90,7 @@ def preprocessing(data):
 
 if __name__ == '__main__':
     heart_data = load_data()
-    #print(heart_data)
     preprocessing(heart_data)
+    #pre_para = parameter['preprocessing']['pos_val_dict']
+    #print(pre_para['age'])
+    #print(pre_para['sex'])
