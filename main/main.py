@@ -47,9 +47,11 @@ def preprocessing(data):
         Logger.error('There are duplicates in the dataset which need to be handled first')
         raise ValueError
 
-    print(X_data['chol'].min())
-    print(X_data['chol'].max())
-    print(X_data['chol'].value_counts().sort_index())
+
+    print(X_data['oldpeak'].min())
+    print(X_data['oldpeak'].max())
+    print(X_data['oldpeak'].value_counts().sort_index())
+    print(X_data['oldpeak'].dtype)
     flag_dict = {}
     f_val_d = parameter['preprocessing']['f_val_d']
     f_type_d = parameter['preprocessing']['f_type_d']
@@ -60,15 +62,13 @@ def preprocessing(data):
             Logger.info('Checking feature "{}" for missing or wrong values and type'.format(i))
             assert X_data[i].isna().sum() == 0
             assert X_data[i].between(*f_val_d[i]).all() == 1
-            # assert set(X_data[i].value_counts().sort_index().index.to_list()).issubset(f_val_d[i])
-            Logger.info('Only valid values were used for the feature: {}\n'.format(i))
-            #X_data[i] = X_data.loc[:, i].astype(f_type_d[i])
+            Logger.info('Only valid values were used for the feature: {}'.format(i))
             X_data[i] = X_data[i].astype(f_type_d[i])
             assert X_data[i].dtype == f_type_d[i]
-            Logger.info('Type of feature is correct and there are no missing values')
+            Logger.info('Type of feature: "{}" is also set correctly as: "{}"\n'.format(i, X_data[i].dtype))
 
 
-            if i == 'trestbps':
+            if i == 'oldpeak':
                 break
 
         except AssertionError:
@@ -76,7 +76,7 @@ def preprocessing(data):
             print(X_data[i].dtype)
 
     pd.options.mode.chained_assignment = 'warn'
-    print(X_data['age'].dtype, X_data['sex'].dtype, X_data['cp'].dtype, X_data['trestbps'].dtype) # --> Delete!
+    print('---------------\n', X_data['oldpeak'].dtype) # --> Delete!
 
 
 
