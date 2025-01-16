@@ -4,11 +4,12 @@
 from .logs import MakeLogger
 from .yaml import YamlHandler
 from .decorators import memorizer
-from .preprocessing import PreProcessor
+from .visualizing import Visualizer
 
 # To import all modules/functions at once use the *
 __all__ = (
     MakeLogger,
     YamlHandler,
+    Visualizer,
     memorizer
 )
