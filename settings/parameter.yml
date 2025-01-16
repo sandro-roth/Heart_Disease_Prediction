@@ -4,5 +4,20 @@
 'lin_reg':
   'para1': 14
 
-'Cluster':
+'cluster':
   'para1': 2
+
+'preprocessing':
+  'f_val_d':
+    'age': [0, 100]
+    'sex': [0,1]
+    'cp': [1, 4]
+    'trestbps': [60, 220]
+    'chol': [50, 600]
+
+  'f_type_d':
+    'age': 'int'
+    'sex': 'category'
+    'cp': 'category'
+    'trestbps': 'int'
+    'chol': 'int'
