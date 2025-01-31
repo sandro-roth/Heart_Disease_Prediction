@@ -13,6 +13,7 @@ from utils import memorizer
 
 # Initializing Project by setting up logger and parameter settings
 Logger = MakeLogger().costum_log(filename='main.log')
+feature_log = MakeLogger().costum_log(filename='features.log')
 yhadl = YamlHandler()
 settings_path = os.path.join(os.path.dirname(os.getcwd()), 'settings')
 p_file_path = os.path.join(settings_path, 'parameter.yml')
@@ -50,8 +51,10 @@ def preprocessing(data):
     flags = set()
     f_val_d = parameter['preprocessing']['f_val_d']
     f_type_d = parameter['preprocessing']['f_type_d']
+
     # Remove SettingWithCopyWarnings for the dtype part setting
     pd.options.mode.chained_assignment = None
+
     for i in X_data.columns:
         try:
             # Check for missing values in the current column
@@ -72,19 +75,52 @@ def preprocessing(data):
 
         except ValueError:
             Logger.info('There are missing values in the feature "{}"'.format(i))
-            Logger.warning('The feature "{}" will be handled later on and is currently stored'.format(i))
+            Logger.warning('The feature "{}" will be handled later on and is currently stored\n'.format(i))
             flags.add(i)
+
         except TypeError:
             Logger.info('Type warning appeared for "{}" which means the data source was changed'.format(i))
-            Logger.warning('The type is not handled further and may lead to complications later on')
+            Logger.warning('The type is not handled further and may lead to complications later on\n')
 
         except Exception as error:
             Logger.info('Error-message: {}'.format(repr(error)))
-            Logger.warning('Data source was changed and will influence results of ML Algorithm applied later on')
+            Logger.warning('Data source was changed and will influence results of ML Algorithm applied later on\n')
 
+    # Checking columns with missing values
+    for i in flags:
+        if i == 'ca':
+            feature_log.debug('This feature "ca" describes number of major vessels (0-3) and therefore cannot be estimated')
+            feature_log.info('The number of missing values is: {}'.format(X_data[i].isna().sum()))
+            feature_log.warning('Since this is less than 5%. The indices of the missing values are deleted from the data')
+            drop_list = X_data[X_data['ca'].isna()].index.to_list()
+            feature_log.warning('The indices {} of X_data and y_data are dropped\n'.format(drop_list))
+            X_data.drop(labels = drop_list, axis = 0, inplace = True)
+            y_data.drop(labels = drop_list, axis = 0, inplace = True)
+
+        elif i == 'thal':
+            pass
+            feature_log.debug('This feature "thal" is the inherited blood disorder of no produding enough hemoglobin it cannot be estimated')
+            feature_log.info('The number of missing values is: {}'.format(X_data[i].isna().sum()))
+            feature_log.warning('Since this is less than 5%. The indices of the missing values are deleted from the data')
+
+            drop_list = X_data[X_data['thal'].isna()].index.to_list()
+            feature_log.warning('The indices {} of X_data and y_data are dropped\n'.format(drop_list))
+            X_data.drop(labels = drop_list, axis = 0, inplace = True)
+            y_data.drop(labels = drop_list, axis = 0, inplace = True)
+
+        else:
+            feature_log.debug('There is an unexpected feature "{}"'.format(i))
+            feature_log.critical('This unexpected feature most likely breaks the code further down')
+
+    # Set the SettingWithCopyWarnings to "warn" again
     pd.options.mode.chained_assignment = 'warn'
 
-    print(flags)
+    # reset the indices of X and y data
+    X_data.reset_index(inplace = True, drop = True)
+    y_data.reset_index(inplace = True, drop = True)
+
+    # Visualize Data as EDA to look for outliers
+
 
 
 
