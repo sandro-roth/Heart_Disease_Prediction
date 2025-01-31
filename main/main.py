@@ -9,6 +9,7 @@ import numpy as np
 # Own created modules
 from utils import MakeLogger
 from utils import YamlHandler
+from utils import Visualizer
 from utils import memorizer
 
 # Initializing Project by setting up logger and parameter settings
@@ -21,9 +22,9 @@ parameter = yhadl.loader(p_file_path)
 
 
 def load_data():
-    '''This function fetches data directly from the module ucimlrepo. Therefore there is no
+    """This function fetches data directly from the module ucimlrepo. Therefore there is no
     need to import the data manually from the /data folder
-    return: pandas dataframe'''
+    return: pandas dataframe"""
     try:
         dataframe = fetch_ucirepo(id=45)
         Logger.info('Function call load_data was successfull')
@@ -37,7 +38,7 @@ def load_data():
 
 
 def preprocessing(data):
-    '''Preprocessing a pandas health dataset.'''
+    """Preprocessing a pandas health dataset."""
     X_data = data.data.features
     y_data = data.data.targets
     # Check for full duplicates in the X_data
@@ -94,8 +95,8 @@ def preprocessing(data):
             feature_log.warning('Since this is less than 5%. The indices of the missing values are deleted from the data')
             drop_list = X_data[X_data['ca'].isna()].index.to_list()
             feature_log.warning('The indices {} of X_data and y_data are dropped\n'.format(drop_list))
-            X_data.drop(labels = drop_list, axis = 0, inplace = True)
-            y_data.drop(labels = drop_list, axis = 0, inplace = True)
+            X_data.drop(labels=drop_list, axis=0, inplace=True)
+            y_data.drop(labels=drop_list, axis=0, inplace=True)
 
         elif i == 'thal':
             pass
@@ -105,8 +106,8 @@ def preprocessing(data):
 
             drop_list = X_data[X_data['thal'].isna()].index.to_list()
             feature_log.warning('The indices {} of X_data and y_data are dropped\n'.format(drop_list))
-            X_data.drop(labels = drop_list, axis = 0, inplace = True)
-            y_data.drop(labels = drop_list, axis = 0, inplace = True)
+            X_data.drop(labels=drop_list, axis=0, inplace=True)
+            y_data.drop(labels=drop_list, axis=0, inplace=True)
 
         else:
             feature_log.debug('There is an unexpected feature "{}"'.format(i))
@@ -116,25 +117,12 @@ def preprocessing(data):
     pd.options.mode.chained_assignment = 'warn'
 
     # reset the indices of X and y data
-    X_data.reset_index(inplace = True, drop = True)
-    y_data.reset_index(inplace = True, drop = True)
+    X_data.reset_index(inplace=True, drop=True)
+    y_data.reset_index(inplace=True, drop=True)
 
     # Visualize Data as EDA to look for outliers
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
     heart_data = load_data()
     preprocessing(heart_data)
-    #pre_para = parameter['preprocessing']['pos_val_dict']
-    #print(pre_para['age'])
-    #print(pre_para['sex'])
