@@ -47,36 +47,44 @@ def preprocessing(data):
         Logger.error('There are duplicates in the dataset which need to be handled first')
         raise ValueError
 
-
-    print(X_data['oldpeak'].min())
-    print(X_data['oldpeak'].max())
-    print(X_data['oldpeak'].value_counts().sort_index())
-    print(X_data['oldpeak'].dtype)
-    flag_dict = {}
+    flags = set()
     f_val_d = parameter['preprocessing']['f_val_d']
     f_type_d = parameter['preprocessing']['f_type_d']
     # Remove SettingWithCopyWarnings for the dtype part setting
     pd.options.mode.chained_assignment = None
     for i in X_data.columns:
         try:
+            # Check for missing values in the current column
             Logger.info('Checking feature "{}" for missing or wrong values and type'.format(i))
-            assert X_data[i].isna().sum() == 0
-            assert X_data[i].between(*f_val_d[i]).all() == 1
+            if X_data[i].isna().sum() != 0:
+                raise ValueError
+
+            # Check if the values are in the correct range
+            if X_data[i].between(*f_val_d[i]).all() != 1:
+                raise Exception('The Value is not in the right range')
             Logger.info('Only valid values were used for the feature: {}'.format(i))
+
+            # reassure that the type is set correctly
             X_data[i] = X_data[i].astype(f_type_d[i])
-            assert X_data[i].dtype == f_type_d[i]
-            Logger.info('Type of feature: "{}" is also set correctly as: "{}"\n'.format(i, X_data[i].dtype))
+            if X_data[i].dtype != f_type_d[i]:
+                raise TypeError
+            Logger.info('Type of feature: "{}" is also set correctly as : "{}"\n'.format(i, X_data[i].dtype))
 
+        except ValueError:
+            Logger.info('There are missing values in the feature "{}"'.format(i))
+            Logger.warning('The feature "{}" will be handled later on and is currently stored'.format(i))
+            flags.add(i)
+        except TypeError:
+            Logger.info('Type warning appeared for "{}" which means the data source was changed'.format(i))
+            Logger.warning('The type is not handled further and may lead to complications later on')
 
-            if i == 'oldpeak':
-                break
-
-        except AssertionError:
-            print('Let me see which error it is!')
-            print(X_data[i].dtype)
+        except Exception as error:
+            Logger.info('Error-message: {}'.format(repr(error)))
+            Logger.warning('Data source was changed and will influence results of ML Algorithm applied later on')
 
     pd.options.mode.chained_assignment = 'warn'
-    print('---------------\n', X_data['oldpeak'].dtype) # --> Delete!
+
+    print(flags)
 
 
 
