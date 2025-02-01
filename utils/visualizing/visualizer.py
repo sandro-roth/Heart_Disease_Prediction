@@ -72,8 +72,49 @@ class Visualizer:
 
     def boxplot(self):
         """Create boxplots of categorical features"""
-        
+        self.pic_name = 'Feature_boxplots.png'
+        melted_df = pd.melt(self.data[['age', 'trestbps', 'chol', 'thalach']])
 
+        # Separate the data for 'chol' and other features
+        chol_df = melted_df[melted_df['variable'] == 'chol']
+        other_df = melted_df[melted_df['variable'] != 'chol']
+
+        # Create subplots with adjusted widths
+        fig, axes = plt.subplots(1, 2, figsize=(14, 6), gridspec_kw={'width_ratios': [2, 1]})
+
+        # Plot for non-'chol' features
+        sns.boxplot(
+            data=other_df,
+            x='variable', y='value',
+            ax=axes[0],
+            hue='variable',
+            palette="Set2",
+            linewidth=1.5,
+            legend=False,
+            width=0.4  # Adjust box width for a sleeker look
+        )
+        axes[0].set_title('Distribution of Age, Trestbps, and Thalach', fontsize=12, fontweight='bold')
+        axes[0].set_xlabel("Feature", fontsize=10, labelpad=15)
+        axes[0].set_ylabel("Value", fontsize=10)
+        axes[0].tick_params(axis='x', rotation=15)
+
+        # Plot for 'chol'
+        sns.boxplot(
+            data=chol_df,
+            x='variable', y='value',
+            ax=axes[1],
+            color='steelblue',
+            linewidth=1.5,
+            width=0.4  # Adjust box width for a sleeker look
+        )
+        axes[1].set_title('Distribution of Chol', fontsize=12, fontweight='bold')
+        axes[1].set_xlabel("Feature", fontsize=10, labelpad=15)
+        axes[1].set_ylabel("Value", fontsize=10)
+        axes[1].tick_params(axis='x', rotation=15)
+
+        # Adjust layout for better spacing
+        plt.tight_layout(rect=[0, 0, 1, 0.95])
+        plt.suptitle('Data distribution of numerical features', fontsize=14, fontweight='bold')
 
 
     def save_pic(self, path_to_file):
