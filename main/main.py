@@ -47,11 +47,11 @@ def load_data(logObj):
 def main():
     heart_disease_data = load_data(prep_log)
     X_data, y_data = preprocess(heart_disease_data, prep_log, feature_log, yml_obj)
-    visualize(Visualizer(X_data, y_data), fig_path, prep_log)
+    #visualize(Visualizer(X_data, y_data), fig_path, prep_log)
 
     # Save preprocessed Data
-    X_data.to_pickle(os.path.join(d_path, 'X_data.pkl'))
-    y_data.to_pickle(os.path.join(d_path, 'y_data.pkl'))
+    #X_data.to_pickle(os.path.join(d_path, 'X_data.pkl'))
+    #y_data.to_pickle(os.path.join(d_path, 'y_data.pkl'))
 
 
 if __name__ == '__main__':
