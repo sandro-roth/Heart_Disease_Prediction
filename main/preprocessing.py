@@ -156,6 +156,5 @@ def preprocessing(data):
 
 
 if __name__ == '__main__':
-    # heart_data = load_data()
-    # preprocessing(heart_data)
-    X_data = pd.read_pickle(os.path.join(data_path, 'X_data.pkl'))
+    heart_data = load_data()
+    preprocessing(heart_data)
