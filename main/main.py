@@ -10,7 +10,7 @@ import numpy as np
 from utils import MakeLogger
 from utils import YamlHandler
 from utils import Visualizer
-from utils import memorizer
+#from utils import memorizer
 
 # Initializing Project by setting up logger and parameter settings
 Logger = MakeLogger().costum_log(filename='main.log')
@@ -113,15 +113,21 @@ def preprocessing(data):
             feature_log.debug('There is an unexpected feature "{}"'.format(i))
             feature_log.critical('This unexpected feature most likely breaks the code further down')
 
-    # Set the SettingWithCopyWarnings to "warn" again
-    pd.options.mode.chained_assignment = 'warn'
 
-    # reset the indices of X and y data
+    # Reset the indices of X and y data
     X_data.reset_index(inplace=True, drop=True)
     y_data.reset_index(inplace=True, drop=True)
 
-    # Visualize Data as EDA to look for outliers
+    # Change target values to present or absence of heart disease
+    y_data.loc[y_data['num'] > 0] = 1
 
+    # Set the SettingWithCopyWarnings to "warn" again
+    pd.options.mode.chained_assignment = 'warn'
+
+    # Visualize Data as EDA to look for outliers
+    eda = Visualizer(X_data, y_data)
+    eda.pairplot()
+    print(eda)
 
 if __name__ == '__main__':
     heart_data = load_data()
