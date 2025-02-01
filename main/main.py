@@ -17,6 +17,7 @@ Logger = MakeLogger().costum_log(filename='main.log')
 feature_log = MakeLogger().costum_log(filename='features.log')
 yhadl = YamlHandler()
 settings_path = os.path.join(os.path.dirname(os.getcwd()), 'settings')
+fig_path = os.path.join(os.path.dirname(os.getcwd()), 'figures')
 p_file_path = os.path.join(settings_path, 'parameter.yml')
 parameter = yhadl.loader(p_file_path)
 
@@ -120,14 +121,14 @@ def preprocessing(data):
 
     # Change target values to present or absence of heart disease
     y_data.loc[y_data['num'] > 0] = 1
+    y_data.rename(columns={'num': 'target'}, inplace=True)
 
     # Set the SettingWithCopyWarnings to "warn" again
     pd.options.mode.chained_assignment = 'warn'
 
     # Visualize Data as EDA to look for outliers
-    eda = Visualizer(X_data, y_data)
-    eda.pairplot()
-    print(eda)
+
+
 
 if __name__ == '__main__':
     heart_data = load_data()
