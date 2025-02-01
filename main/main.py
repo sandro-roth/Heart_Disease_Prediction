@@ -16,9 +16,13 @@ from utils import Visualizer
 prep_log = MakeLogger().costum_log(filename='preprocess.log')
 feature_log = MakeLogger().costum_log(filename='features.log')
 yhadl = YamlHandler()
+
+# paths
 settings_path = os.path.join(os.path.dirname(os.getcwd()), 'settings')
 fig_path = os.path.join(os.path.dirname(os.getcwd()), 'figures')
 p_file_path = os.path.join(settings_path, 'parameter.yml')
+data_path = os.path.join(os.path.dirname(os.getcwd()), 'data')
+
 parameter = yhadl.loader(p_file_path)
 
 
@@ -127,28 +131,31 @@ def preprocessing(data):
     pd.options.mode.chained_assignment = 'warn'
 
     # Visualize Data as EDA to look for outliers
-    # eda = Visualizer(X_data, y_data)
-    # eda.pairplot()
-    # eda.save_pic(fig_path)
-    # eda.correlation()
-    # eda.save_pic(fig_path)
-    # eda.barplot('sex')
-    # eda.save_pic(fig_path)
-    # eda.barplot('fbs')
-    # eda.save_pic(fig_path)
-    # eda.barplot('exang')
-    # eda.save_pic(fig_path)
-    # eda.barplot('cp')
-    # eda.save_pic(fig_path)
-    # eda.boxplot()
-    # eda.save_pic(fig_path)
+    eda = Visualizer(X_data, y_data)
+    eda.pairplot()
+    eda.save_pic(fig_path)
+    eda.correlation()
+    eda.save_pic(fig_path)
+    eda.barplot('sex')
+    eda.save_pic(fig_path)
+    eda.barplot('fbs')
+    eda.save_pic(fig_path)
+    eda.barplot('exang')
+    eda.save_pic(fig_path)
+    eda.barplot('cp')
+    eda.save_pic(fig_path)
+    eda.boxplot()
+    eda.save_pic(fig_path)
 
     prep_log.info('The features will not be further pre-processed.')
     prep_log.info('Dataset will be stored in directory "data".')
     prep_log.warning('Outliers in some features may affect performance of model. This has to be checked later on.')
 
-    
+    X_data.to_pickle(os.path.join(data_path, 'X_data.pkl'))
+    y_data.to_pickle(os.path.join(data_path, 'y_data.pkl'))
+
 
 if __name__ == '__main__':
-    heart_data = load_data()
-    preprocessing(heart_data)
+    # heart_data = load_data()
+    # preprocessing(heart_data)
+    X_data = pd.read_pickle(os.path.join(data_path, 'X_data.pkl'))
