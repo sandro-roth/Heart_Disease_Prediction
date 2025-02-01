@@ -15,14 +15,7 @@ class Visualizer:
         self.f_df = f_df
         self.t_df = t_df
         self.data = pd.concat([f_df, t_df], axis=1)
-
-        # Create column with correct target names
-        self.data['target_name'] = self.data['target'].map(str)
-        self.data['target_name'] = self.data['target_name'].str.replace('0', 'Normal')
-        self.data['target_name'] = self.data['target_name'].str.replace('1', 'Diseased')
-        self.data['target_name'] = self.data['target_name'].astype('category')
-
-        self.hue = 'target_name'
+        self.hue = 'target'
         self.pic_name = None
 
 
@@ -67,7 +60,7 @@ class Visualizer:
         g.set_xticklabels(lookup[f_name]['labels'])
         g.fig.subplots_adjust(top=0.9)
         g.fig.suptitle(lookup[f_name]['title'])
-        plt.legend(title='Target', loc='upper left', labels=self.data['target_name'])
+        plt.legend(title='Target', loc='upper left', labels=self.data['target'])
 
 
     def boxplot(self):
