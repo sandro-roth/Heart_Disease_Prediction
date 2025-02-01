@@ -3,4 +3,5 @@
 venv/
 main.log
 features.log
+preprocess.log
 **/__pycache__/
