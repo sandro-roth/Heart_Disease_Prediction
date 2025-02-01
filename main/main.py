@@ -13,7 +13,7 @@ from utils import Visualizer
 #from utils import memorizer
 
 # Initializing Project by setting up logger and parameter settings
-Logger = MakeLogger().costum_log(filename='main.log')
+prep_log = MakeLogger().costum_log(filename='preprocess.log')
 feature_log = MakeLogger().costum_log(filename='features.log')
 yhadl = YamlHandler()
 settings_path = os.path.join(os.path.dirname(os.getcwd()), 'settings')
@@ -28,11 +28,11 @@ def load_data():
     return: pandas dataframe"""
     try:
         dataframe = fetch_ucirepo(id=45)
-        Logger.info('Function call load_data was successfull')
-        Logger.debug('Heart disease data has been loaded')
-        Logger.warning('Id might change in future ucimlrepo versions\n')
+        prep_log.info('Function call load_data was successfull')
+        prep_log.debug('Heart disease data has been loaded')
+        prep_log.warning('Id might change in future ucimlrepo versions\n')
     except Exception as e:
-        Logger.error('Data could not be loaded, Exception: {}'.format(e))
+        prep_log.error('Data could not be loaded, Exception: {}'.format(e))
         dataframe = None
 
     return dataframe
@@ -45,9 +45,9 @@ def preprocessing(data):
     # Check for full duplicates in the X_data
     try:
         assert len(X_data[X_data.duplicated()]) == 0
-        Logger.info('There are no full duplicates in the dataset!\n')
+        prep_log.info('There are no full duplicates in the dataset!\n')
     except AssertionError:
-        Logger.error('There are duplicates in the dataset which need to be handled first')
+        prep_log.error('There are duplicates in the dataset which need to be handled first')
         raise ValueError
 
     flags = set()
@@ -60,33 +60,33 @@ def preprocessing(data):
     for i in X_data.columns:
         try:
             # Check for missing values in the current column
-            Logger.info('Checking feature "{}" for missing or wrong values and type'.format(i))
+            prep_log.info('Checking feature "{}" for missing or wrong values and type'.format(i))
             if X_data[i].isna().sum() != 0:
                 raise ValueError
 
             # Check if the values are in the correct range
             if X_data[i].between(*f_val_d[i]).all() != 1:
                 raise Exception('The Value is not in the right range')
-            Logger.info('Only valid values were used for the feature: {}'.format(i))
+            prep_log.info('Only valid values were used for the feature: {}'.format(i))
 
             # reassure that the type is set correctly
             X_data[i] = X_data[i].astype(f_type_d[i])
             if X_data[i].dtype != f_type_d[i]:
                 raise TypeError
-            Logger.info('Type of feature: "{}" is also set correctly as : "{}"\n'.format(i, X_data[i].dtype))
+            prep_log.info('Type of feature: "{}" is also set correctly as : "{}"\n'.format(i, X_data[i].dtype))
 
         except ValueError:
-            Logger.info('There are missing values in the feature "{}"'.format(i))
-            Logger.warning('The feature "{}" will be handled later on and is currently stored\n'.format(i))
+            prep_log.info('There are missing values in the feature "{}"'.format(i))
+            prep_log.warning('The feature "{}" will be handled later on and is currently stored\n'.format(i))
             flags.add(i)
 
         except TypeError:
-            Logger.info('Type warning appeared for "{}" which means the data source was changed'.format(i))
-            Logger.warning('The type is not handled further and may lead to complications later on\n')
+            prep_log.info('Type warning appeared for "{}" which means the data source was changed'.format(i))
+            prep_log.warning('The type is not handled further and may lead to complications later on\n')
 
         except Exception as error:
-            Logger.info('Error-message: {}'.format(repr(error)))
-            Logger.warning('Data source was changed and will influence results of ML Algorithm applied later on\n')
+            prep_log.info('Error-message: {}'.format(repr(error)))
+            prep_log.warning('Data source was changed and will influence results of ML Algorithm applied later on\n')
 
     # Checking columns with missing values
     for i in flags:
@@ -101,7 +101,7 @@ def preprocessing(data):
 
         elif i == 'thal':
             pass
-            feature_log.debug('This feature "thal" is the inherited blood disorder of no produding enough hemoglobin it cannot be estimated')
+            feature_log.debug('This feature "thal" is the inherited blood disorder of no producing enough hemoglobin it cannot be estimated')
             feature_log.info('The number of missing values is: {}'.format(X_data[i].isna().sum()))
             feature_log.warning('Since this is less than 5%. The indices of the missing values are deleted from the data')
 
@@ -127,8 +127,27 @@ def preprocessing(data):
     pd.options.mode.chained_assignment = 'warn'
 
     # Visualize Data as EDA to look for outliers
+    # eda = Visualizer(X_data, y_data)
+    # eda.pairplot()
+    # eda.save_pic(fig_path)
+    # eda.correlation()
+    # eda.save_pic(fig_path)
+    # eda.barplot('sex')
+    # eda.save_pic(fig_path)
+    # eda.barplot('fbs')
+    # eda.save_pic(fig_path)
+    # eda.barplot('exang')
+    # eda.save_pic(fig_path)
+    # eda.barplot('cp')
+    # eda.save_pic(fig_path)
+    # eda.boxplot()
+    # eda.save_pic(fig_path)
 
+    prep_log.info('The features will not be further pre-processed.')
+    prep_log.info('Dataset will be stored in directory "data".')
+    prep_log.warning('Outliers in some features may affect performance of model. This has to be checked later on.')
 
+    
 
 if __name__ == '__main__':
     heart_data = load_data()
