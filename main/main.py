@@ -1,20 +1,18 @@
 import os
-
 from ucimlrepo import fetch_ucirepo
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
+
 
 from utils import MakeLogger
 from utils import YamlHandler
 from utils import Visualizer
 from preprocessing import preprocess, visualize
 from machine_learning import MachineLearning
-#from utils import memorizer
 
 # Loggers
 prep_log = MakeLogger().costum_log(filename='preprocess.log')
 feature_log = MakeLogger().costum_log(filename='features.log')
+ml_log = MakeLogger().costum_log(filename='learning.log')
 
 # Yaml file handler
 yhadl = YamlHandler()
@@ -59,19 +57,30 @@ def learn():
     ML_obj = MachineLearning(X_data, y_data, yml_obj)
 
     # Logistic Regression
-    # log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
-    # log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
-    # Add log_reg_acc and log_reg_cr to ML Logger file
+    log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
+    log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
+    ml_log.info('The accuracy of the Logistic Regression model after cross validation is: {}'.format(log_reg_acc))
+    ml_log.info('This is the full classification report of the model \n\n{}\n'.format(log_reg_cr))
 
     # k-Nearest Neighbors
-    # k_nearest_path = os.path.join(os.getcwd(), 'Results/KNearest')
-    # knn_acc, knn_cr = ML_obj.k_nearest(k_nearest_path)
-    # Add log_reg_acc and log_reg_cr to ML Logger file
+    k_nearest_path = os.path.join(os.getcwd(), 'Results/KNearest')
+    grid_model, knn_acc, knn_cr = ML_obj.k_nearest(k_nearest_path)
+    ml_log.info('The accuracy of the k-Nearest model after hyperparameter tuning is: {}'.format(knn_acc))
+    ml_log.info('These are the best parameters from training {}'.format(grid_model.best_params_))
+    ml_log.info('This is the full classification report of the model \n\n{}\n'.format(knn_cr))
 
     # RandomForest
+    rf_path = os.path.join(os.getcwd(), 'Results/RandomForest')
+    grid_model, rf_acc, rf_cr = ML_obj.random_forest(rf_path)
+    ml_log.info('The accuracy of the Randomforest model after hyperparameter tuning is: {}'.format(rf_acc))
+    ml_log.info('These are the best parameters from training {}'.format(grid_model.best_params_))
+    ml_log.info('This is the full classification report of the model \n\n{}\n'.format(rf_cr))
 
+    # Gradient boosted Trees
+    # Upcoming
 
-
+    # Voting classifier (Decision Tree, Logistic Regression, KNN)
+    # Upcoming
 
 if __name__ == '__main__':
     #prepare()

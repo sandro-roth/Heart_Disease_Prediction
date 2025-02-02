@@ -1,13 +1,14 @@
 # Pre-training
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
 
 # Model selections
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
-
+from sklearn.ensemble import RandomForestClassifier
 
 # Hyper-parameter tuning
 from sklearn.model_selection import GridSearchCV
@@ -21,6 +22,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 class MachineLearning:
     """ML Class for classification algorithms to predict the presence of a heart disease"""
     def __init__(self, X_data, y_data, yml_obj):
+        self.f_name = X_data.columns
         X_data = X_data.values
         y_data = y_data.values.ravel()
         self.rs = yml_obj['ML']['random_state']
@@ -114,13 +116,53 @@ class MachineLearning:
         acc_score = accuracy_score(self.y_test, y_pred)
         class_rep = classification_report(self.y_test, y_pred)
         self.heatmap(y_pred, path, 'Confusion matrix k-Nearest neighbor')
-        return acc_score, class_rep
+        return grid_k, acc_score, class_rep
 
 
-    def random_forest(self):
-        pass
+    def random_forest(self, path):
+        """
+        Performing Random Forest on the Classification problem
+        :param path: str, directory of results
+        :return: (float, str), accuracy score of model and classification report of model
+        """
+        rf_model = RandomForestClassifier()
+
+        # Parameter
+        ns = self.yml_obj['r_forest']['KF_splits']
+        ks = self.yml_obj['r_forest']['KF_shuffel']
+        n_est = self.yml_obj['r_forest']['n_est']
+        m_feat = self.yml_obj['r_forest']['max_features']
+        m_dep = self.yml_obj['r_forest']['max_depth']
+        cr = self.yml_obj['r_forest']['crit']
+
+        # Hyperparameter tuning
+        params_rf = {'n_estimators': n_est, 'max_features': m_feat, 'max_depth': m_dep, 'criterion': cr}
+        kf = KFold(n_splits=ns, shuffle=ks, random_state=self.rs)
+        grid_rf = GridSearchCV(estimator=rf_model, param_grid=params_rf, cv=kf, n_jobs=-1, scoring='accuracy')
+        grid_rf.fit(self.X_train, self.y_train)
+
+        rf_model1 = grid_rf.best_estimator_
+        y_pred = rf_model1.predict(self.X_test)
+        acc_score = accuracy_score(self.y_test, y_pred)
+        class_rep = classification_report(self.y_test, y_pred)
+        self.heatmap(y_pred, path, 'Confusion matrix Random Forest')
+
+        # Check feature importance
+        feature_imp = pd.Series(rf_model1.feature_importances_, index=self.f_name).sort_values()
+        plt.clf()
+        plt.figure(figsize=(8, 4))
+        plt.barh(feature_imp.index, feature_imp.values, color='skyblue')
+        plt.xlabel('Gini Importance')
+        plt.title('Feature importance after hyper-parameter tuning')
+        plt.gca().invert_yaxis()
+        plt.savefig(path+'/feature_importance.png')
+
+        return grid_rf, acc_score, class_rep
 
 
     def g_boosted(self):
         pass
 
+
+    def voting_class(self):
+        pass
