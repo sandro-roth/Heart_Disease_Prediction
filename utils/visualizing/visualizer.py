@@ -11,7 +11,6 @@ class Visualizer:
         :param f_df: feature pandas data frame, holding all the features to be analyzed
         :param t_df: target pandas data frame, holding only the target values
         """
-
         self.f_df = f_df
         self.t_df = t_df
         self.data = pd.concat([f_df, t_df], axis=1)

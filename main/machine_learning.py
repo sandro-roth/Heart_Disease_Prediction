@@ -73,7 +73,9 @@ class MachineLearning:
         # Use cross validation to evaluate training accuracy on different data sets
         kf = KFold(n_splits=ns, random_state=self.rs, shuffle=ks)
         cv_results = cross_val_score(log_model, X_train, self.y_train, cv=kf)
-        plt.boxplot(cv_results, tick_labels=['Logistic Regression'])
+        fig, ax = plt.subplots(figsize=(8,6))
+        fig.subplots_adjust(top=0.9, bottom=0.1)
+        ax.boxplot(cv_results, tick_labels=['Logistic Regression'])
         plt.title('6-Fold cross validation accuracy scores')
         plt.savefig(path+'/cvs_boxplot.png')
 
