@@ -16,7 +16,12 @@
   'KF_shuffel': True
 
 'r_forest':
-  'para1': 2
+  'KF_splits': 6
+  'KF_shuffel': True
+  'n_est': [250, 300, 400]
+  'max_features': ['sqrt', 'log2']
+  'max_depth': [2, 3, 4, 5]
+  'crit': ['gini', 'entropy']
 
 
 'g_boosted':
