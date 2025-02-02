@@ -60,17 +60,17 @@ def learn():
     ML_obj = MachineLearning(X_data, y_data, yml_obj)
 
     # Logistic Regression
-    # log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
-    # log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
-    # ml_log.info('The accuracy of the Logistic Regression model after cross validation is: {}'.format(log_reg_acc))
-    # ml_log.info('This is the full classification report of the model \n\n{}\n'.format(log_reg_cr))
+    log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
+    log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
+    ml_log.info('The accuracy of the Logistic Regression model after cross validation is: {}'.format(log_reg_acc))
+    ml_log.info('This is the full classification report of the model \n\n{}\n'.format(log_reg_cr))
 
     # k-Nearest Neighbors
-    # k_nearest_path = os.path.join(os.getcwd(), 'Results/KNearest')
-    # grid_model, knn_acc, knn_cr = ML_obj.k_nearest(k_nearest_path)
-    # ml_log.info('The accuracy of the k-Nearest model after hyperparameter tuning is: {}'.format(knn_acc))
-    # ml_log.info('These are the best parameters from training {}'.format(grid_model.best_params_))
-    # ml_log.info('This is the full classification report of the model \n\n{}\n'.format(knn_cr))
+    k_nearest_path = os.path.join(os.getcwd(), 'Results/KNearest')
+    grid_model, knn_acc, knn_cr = ML_obj.k_nearest(k_nearest_path)
+    ml_log.info('The accuracy of the k-Nearest model after hyperparameter tuning is: {}'.format(knn_acc))
+    ml_log.info('These are the best parameters from training {}'.format(grid_model.best_params_))
+    ml_log.info('This is the full classification report of the model \n\n{}\n'.format(knn_cr))
 
     # RandomForest
     rf_path = os.path.join(os.getcwd(), 'Results/RandomForest')
@@ -86,6 +86,6 @@ def learn():
     # Upcoming
 
 if __name__ == '__main__':
-    #prepare()
+    prepare()
     learn()
 
