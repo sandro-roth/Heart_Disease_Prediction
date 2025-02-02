@@ -1,27 +1,23 @@
-# Pre-training
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
-
-# Model selections
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
-
-# Hyper-parameter tuning
 from sklearn.model_selection import GridSearchCV
-
-
-# model evaluation metrics
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-
+from sklearn import tree
 
 
 class MachineLearning:
-    """ML Class for classification algorithms to predict the presence of a heart disease"""
+    """
+    ML Class for classification algorithms to predict the presence of a heart disease
+    """
     def __init__(self, X_data, y_data, yml_obj):
+        """"""
         self.f_name = X_data.columns
         X_data = X_data.values
         y_data = y_data.values.ravel()
@@ -35,6 +31,10 @@ class MachineLearning:
 
 
     def standardize(self):
+        """
+        Centering and Scaling the training data and applies transformation on the test data set.
+        :return: (np.ndarray, np.ndarray), standardized data for training and testing
+        """
         scaler = StandardScaler()
         X_train_scaled = scaler.fit_transform(self.X_train)
         X_test_scaled = scaler.transform(self.X_test)
@@ -44,9 +44,9 @@ class MachineLearning:
     def heatmap(self, y_prediction, dir_path, fig_title):
         """
         Saves a heatmap from the prediction of the ML algorithm
-        :param y_prediction:
-        :param dir_path:
-        :param fig_title:
+        :param y_prediction: numpy-array, holds a models prediction of the target
+        :param dir_path: str, path to store the figure to
+        :param fig_title: str, title of the figure to be stored
         """
         plt.clf()
         g = sns.heatmap(confusion_matrix(self.y_test, y_prediction), fmt='.2g', linewidths=0.5, annot=True)
@@ -109,7 +109,6 @@ class MachineLearning:
         kf = KFold(n_splits=ns, shuffle=ks, random_state=self.rs)
         grid_k = GridSearchCV(estimator=knn, param_grid=params_k, cv=kf, scoring='accuracy', return_train_score=False)
         grid_k.fit(X_train, self.y_train)
-        #print(grid_k.best_params_, grid_k.best_score_)
 
         knn1 = grid_k.best_estimator_
         y_pred = knn1.predict(X_test)
@@ -125,7 +124,7 @@ class MachineLearning:
         :param path: str, directory of results
         :return: (float, str), accuracy score of model and classification report of model
         """
-        rf_model = RandomForestClassifier()
+        rf_model = RandomForestClassifier(random_state=self.rs)
 
         # Parameter
         ns = self.yml_obj['r_forest']['KF_splits']
@@ -156,6 +155,14 @@ class MachineLearning:
         plt.title('Feature importance after hyper-parameter tuning')
         plt.gca().invert_yaxis()
         plt.savefig(path+'/feature_importance.png')
+
+        # Save first instance of RandomForest
+        fig, ax = plt.subplots(figsize=(4,4), dpi=800)
+        tree.plot_tree(rf_model1.estimators_[99],
+                       feature_names=self.f_name,
+                       class_names=['Normal', 'Diseased'],
+                       filled=True)
+        fig.savefig(path+'/rf_individualtree.png')
 
         return grid_rf, acc_score, class_rep
 

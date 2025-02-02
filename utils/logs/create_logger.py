@@ -1,7 +1,9 @@
 import logging
 
 class MakeLogger:
-    '''creating logger instance'''
+    """
+    Setup Logger to record the course of the project
+    """
 
     def costum_log(self, loglevel = logging.DEBUG, filename="log.log", modification="w"):
         logger=logging.getLogger(filename)

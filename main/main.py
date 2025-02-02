@@ -2,7 +2,6 @@ import os
 from ucimlrepo import fetch_ucirepo
 import pandas as pd
 
-
 from utils import MakeLogger
 from utils import YamlHandler
 from utils import Visualizer
@@ -42,6 +41,8 @@ def load_data(logObj):
 
 
 def prepare():
+    """ Prepares the data from the ucirepo by performing multiple pre-processing steps.
+    To skip this step in Future runs of the Skript the processed data is pickled and saved."""
     heart_disease_data = load_data(prep_log)
     X_data, y_data = preprocess(heart_disease_data, prep_log, feature_log, yml_obj)
     visualize(Visualizer(X_data, y_data), fig_path, prep_log)
@@ -52,22 +53,24 @@ def prepare():
 
 
 def learn():
+    """ Applying machine learning algorithms to the data. Currently working with 3 different algorithms
+    which will be updated to 5 in the future."""
     X_data = pd.read_pickle(os.path.join(d_path, 'X_data.pkl'))
     y_data = pd.read_pickle(os.path.join(d_path, 'y_data.pkl'))
     ML_obj = MachineLearning(X_data, y_data, yml_obj)
 
     # Logistic Regression
-    log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
-    log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
-    ml_log.info('The accuracy of the Logistic Regression model after cross validation is: {}'.format(log_reg_acc))
-    ml_log.info('This is the full classification report of the model \n\n{}\n'.format(log_reg_cr))
+    # log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
+    # log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
+    # ml_log.info('The accuracy of the Logistic Regression model after cross validation is: {}'.format(log_reg_acc))
+    # ml_log.info('This is the full classification report of the model \n\n{}\n'.format(log_reg_cr))
 
     # k-Nearest Neighbors
-    k_nearest_path = os.path.join(os.getcwd(), 'Results/KNearest')
-    grid_model, knn_acc, knn_cr = ML_obj.k_nearest(k_nearest_path)
-    ml_log.info('The accuracy of the k-Nearest model after hyperparameter tuning is: {}'.format(knn_acc))
-    ml_log.info('These are the best parameters from training {}'.format(grid_model.best_params_))
-    ml_log.info('This is the full classification report of the model \n\n{}\n'.format(knn_cr))
+    # k_nearest_path = os.path.join(os.getcwd(), 'Results/KNearest')
+    # grid_model, knn_acc, knn_cr = ML_obj.k_nearest(k_nearest_path)
+    # ml_log.info('The accuracy of the k-Nearest model after hyperparameter tuning is: {}'.format(knn_acc))
+    # ml_log.info('These are the best parameters from training {}'.format(grid_model.best_params_))
+    # ml_log.info('This is the full classification report of the model \n\n{}\n'.format(knn_cr))
 
     # RandomForest
     rf_path = os.path.join(os.getcwd(), 'Results/RandomForest')
