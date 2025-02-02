@@ -1,11 +1,23 @@
 # This document will hold all parameter. Mainly parameter for the respective machine learning
 # algorithm/model
 ---
-'lin_reg':
-  'para1': 14
+'ML':
+  'random_state': 42
+  't_size': 0.2
 
-'cluster':
+'log_reg':
+  'KF_splits': 6
+  'KF_shuffel': True
+
+'K_nearest':
   'para1': 2
+
+'r_forest':
+  'para1': 2
+
+
+'g_boosted':
+  'para1': 1
 
 'preprocessing':
   'f_val_d':
