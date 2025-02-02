@@ -1,16 +1,14 @@
-# Python modules
 import os
 
-# Installed pip modules
 from ucimlrepo import fetch_ucirepo
 import pandas as pd
 import numpy as np
 
-# Own created modules
 from utils import MakeLogger
 from utils import YamlHandler
 from utils import Visualizer
 from preprocessing import preprocess, visualize
+from machine_learning import MachineLearning
 #from utils import memorizer
 
 # Loggers
@@ -44,16 +42,24 @@ def load_data(logObj):
     return dataframe
 
 
-def main():
+def prepare():
     heart_disease_data = load_data(prep_log)
     X_data, y_data = preprocess(heart_disease_data, prep_log, feature_log, yml_obj)
-    #visualize(Visualizer(X_data, y_data), fig_path, prep_log)
+    visualize(Visualizer(X_data, y_data), fig_path, prep_log)
 
     # Save preprocessed Data
-    #X_data.to_pickle(os.path.join(d_path, 'X_data.pkl'))
-    #y_data.to_pickle(os.path.join(d_path, 'y_data.pkl'))
+    X_data.to_pickle(os.path.join(d_path, 'X_data.pkl'))
+    y_data.to_pickle(os.path.join(d_path, 'y_data.pkl'))
+
+
+def learn():
+    X_data = pd.read_pickle(os.path.join(d_path, 'X_data.pkl'))
+    y_data = pd.read_pickle(os.path.join(d_path, 'y_data.pkl'))
+    print(X_data.head(), y_data.value_counts())
+    #ML_obj = MachineLearning(X_data, y_data)
 
 
 if __name__ == '__main__':
-    main()
+    #prepare()
+    learn()
 
