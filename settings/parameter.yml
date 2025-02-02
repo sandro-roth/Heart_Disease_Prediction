@@ -10,7 +10,10 @@
   'KF_shuffel': True
 
 'K_nearest':
-  'para1': 2
+  'Neighbors': [3, 4, 5, 6, 7, 8]
+  'Metric': ['minkowski', 'manhattan']
+  'KF_splits': 6
+  'KF_shuffel': True
 
 'r_forest':
   'para1': 2
