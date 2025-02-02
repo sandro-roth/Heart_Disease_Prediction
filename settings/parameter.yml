@@ -1,5 +1,6 @@
-# This document will hold all parameter. Mainly parameter for the respective machine learning
-# algorithm/model
+"""This Document holds all relevant parameter of the Project.
+Including hyper-parameter settings for the ML-models as well as
+relevant settings for pre-processing the data."""
 ---
 'ML':
   'random_state': 42
@@ -22,10 +23,6 @@
   'max_features': ['sqrt', 'log2']
   'max_depth': [2, 3, 4, 5]
   'crit': ['gini', 'entropy']
-
-
-'g_boosted':
-  'para1': 1
 
 'preprocessing':
   'f_val_d':
