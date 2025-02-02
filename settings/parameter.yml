@@ -1,6 +1,6 @@
-"""This Document holds all relevant parameter of the Project.
-Including hyper-parameter settings for the ML-models as well as
-relevant settings for pre-processing the data."""
+#This Document holds all relevant parameter of the Project.
+#Including hyper-parameter settings for the ML-models as well as
+#relevant settings for pre-processing the data.
 ---
 'ML':
   'random_state': 42
