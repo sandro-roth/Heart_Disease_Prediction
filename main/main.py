@@ -2,6 +2,7 @@ import os
 
 from ucimlrepo import fetch_ucirepo
 import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
 
 from utils import MakeLogger
@@ -55,8 +56,16 @@ def prepare():
 def learn():
     X_data = pd.read_pickle(os.path.join(d_path, 'X_data.pkl'))
     y_data = pd.read_pickle(os.path.join(d_path, 'y_data.pkl'))
-    print(X_data.head(), y_data.value_counts())
-    #ML_obj = MachineLearning(X_data, y_data)
+    ML_obj = MachineLearning(X_data, y_data, yml_obj)
+
+    # Logistic Regression
+    log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
+    log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
+    # Add log_reg_acc and log_reg_cr to ML Logger file
+
+    #
+
+
 
 
 if __name__ == '__main__':
