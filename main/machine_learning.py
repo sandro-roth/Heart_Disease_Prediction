@@ -10,7 +10,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 
 # Hyper-parameter tuning
-
+from sklearn.model_selection import GridSearchCV
 
 
 # model evaluation metrics
@@ -39,11 +39,25 @@ class MachineLearning:
         return X_train_scaled, X_test_scaled
 
 
+    def heatmap(self, y_prediction, dir_path, fig_title):
+        """
+        Saves a heatmap from the prediction of the ML algorithm
+        :param y_prediction:
+        :param dir_path:
+        :param fig_title:
+        """
+        plt.clf()
+        g = sns.heatmap(confusion_matrix(self.y_test, y_prediction), fmt='.2g', linewidths=0.5, annot=True)
+        g.set(xlabel='Actual pathology', ylabel='Predicted pathology', xticklabels=['Normal', 'Diseased'],
+              yticklabels=['Normal', 'Diseased'], title=fig_title)
+        plt.savefig(dir_path + '/confusion_matrix.png')
+
+
     def log_reg(self, path):
         """
         Performing Logistic Regression on the Classification problem
         :param path: str, directory of results
-        :return: (str, obj), accuracy score of model and classification report of model
+        :return: (float, str), accuracy score of model and classification report of model
         """
         log_model = LogisticRegression()
 
@@ -60,24 +74,47 @@ class MachineLearning:
         plt.boxplot(cv_results, tick_labels=['Logistic Regression'])
         plt.title('6-Fold cross validation accuracy scores')
         plt.savefig(path+'/cvs_boxplot.png')
-        plt.clf()
 
         # Evaluate accuracy on test set
         log_model.fit(X_train, self.y_train)
         y_pred = log_model.predict(X_test)
         acc_score = accuracy_score(self.y_test, y_pred)
         class_rep = classification_report(self.y_test, y_pred)
-        g = sns.heatmap(confusion_matrix(self.y_test, y_pred), fmt='.2g', linewidths=0.5, annot=True)
-        g.set(xlabel='Actual pathology', ylabel='Predicted pathology', xticklabels=['Normal', 'Diseased'],
-              yticklabels=['Normal', 'Diseased'], title='Confusion matrix Logistic Regression')
-        plt.savefig(path+'/confusion_matrix.png')
+        self.heatmap(y_pred, path, 'Confusion matrix Logistic Regression')
         return acc_score, class_rep
 
 
-    def k_nearest(self):
-        # use standardize method for data
+    def k_nearest(self, path):
+        """
+        Performing k-Nearest Neighbors on the Classification problem
+        :param path: str, directory of results
+        :return: (float, str), accuracy score of model and classification report of model
+        """
+        knn = KNeighborsClassifier()
+
+        # Parameter
+        n = self.yml_obj['K_nearest']['Neighbors']
+        m = self.yml_obj['K_nearest']['Metric']
+        ns = self.yml_obj['K_nearest']['KF_splits']
+        ks = self.yml_obj['K_nearest']['KF_shuffel']
+
+        params_k = {'n_neighbors': n, 'metric': m}
+
+        # Use standardize method for data
         X_train, X_test = self.standardize()
-        pass
+
+        # Hyperparameter tuning
+        kf = KFold(n_splits=ns, shuffle=ks, random_state=self.rs)
+        grid_k = GridSearchCV(estimator=knn, param_grid=params_k, cv=kf, scoring='accuracy', return_train_score=False)
+        grid_k.fit(X_train, self.y_train)
+        #print(grid_k.best_params_, grid_k.best_score_)
+
+        knn1 = grid_k.best_estimator_
+        y_pred = knn1.predict(X_test)
+        acc_score = accuracy_score(self.y_test, y_pred)
+        class_rep = classification_report(self.y_test, y_pred)
+        self.heatmap(y_pred, path, 'Confusion matrix k-Nearest neighbor')
+        return acc_score, class_rep
 
 
     def random_forest(self):
@@ -86,3 +123,4 @@ class MachineLearning:
 
     def g_boosted(self):
         pass
+

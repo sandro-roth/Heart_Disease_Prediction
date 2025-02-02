@@ -59,11 +59,16 @@ def learn():
     ML_obj = MachineLearning(X_data, y_data, yml_obj)
 
     # Logistic Regression
-    log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
-    log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
+    # log_reg_path = os.path.join(os.getcwd(), 'Results/Logistic_Regression')
+    # log_reg_acc, log_reg_cr = ML_obj.log_reg(log_reg_path)
     # Add log_reg_acc and log_reg_cr to ML Logger file
 
-    #
+    # k-Nearest Neighbors
+    # k_nearest_path = os.path.join(os.getcwd(), 'Results/KNearest')
+    # knn_acc, knn_cr = ML_obj.k_nearest(k_nearest_path)
+    # Add log_reg_acc and log_reg_cr to ML Logger file
+
+    # RandomForest
 
 
 
