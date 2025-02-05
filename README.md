@@ -72,7 +72,7 @@ The best performance to predict the data was the Logistic Regression model with 
 - Confusion Matrix
 
 <p align="center">
-    <img src="https://github.com/sandro-roth/Heart_Disease_Prediction/blob/main/main/Results/Logistic_Regression/confusion_matrix.png?raw=true" width="300">
+    <img src="https://github.com/sandro-roth/Heart_Disease_Prediction/blob/main/main/Results/Logistic_Regression/confusion_matrix.png?raw=true" width="350">
 </p>
 
 # 
