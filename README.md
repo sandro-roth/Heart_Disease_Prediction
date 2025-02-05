@@ -13,7 +13,6 @@ Random Forest). The origin of the Data is the UCI Heart Disease Dataset [https:/
 - [Model Training](#model-training)
 - [Results](#results)
 - [Contributors](#contributors)
-- [License](#license)
 
 # Installation
 
@@ -75,4 +74,5 @@ The best performance to predict the data was the Logistic Regression model with 
     <img src="https://github.com/sandro-roth/Heart_Disease_Prediction/blob/main/main/Results/Logistic_Regression/confusion_matrix.png?raw=true" width="350">
 </p>
 
-# 
+# Contributors
+- [Sandro Roth]
