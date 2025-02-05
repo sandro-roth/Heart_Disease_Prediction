@@ -62,3 +62,17 @@ The target variable was converted into a binary classification problem for this 
 - 1: Indicates the presence of heart disease.
 
 # Model Training
+upcoming
+
+# Results
+The performance of the models is evaluated using multiple metrics.
+The best performance to predict the data was the Logistic Regression model with the following metrics:
+- Accuracy: 85%
+- F1 Score: 0.82
+- Confusion Matrix
+
+<p align="center">
+    <img src="https://github.com/sandro-roth/Heart_Disease_Prediction/blob/main/main/Results/Logistic_Regression/confusion_matrix.png?raw=true" width="500">
+</p>
+
+# 
