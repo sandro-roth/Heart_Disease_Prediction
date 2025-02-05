@@ -49,6 +49,16 @@ once. Since the preprocessed Data is pickled.
     ```bash
    python main.py
     ```
+   
+# Data
+The dataset used in this project comes from the UCI Machine Learning Repository and is open source. It contains the
+following characteristics:
+- Number of features: 13
+- Number of instances: 303
+- Target variable: Presence of heart disease (Values 0 - 4)
 
+The target variable was converted into a binary classification problem for this project:
+- 0: Indicates a normal status, meaning no heart disease.
+- 1: Indicates the presence of heart disease.
 
-
+# Model Training
