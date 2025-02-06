@@ -79,11 +79,11 @@ A cross-validation method with 6 folds and a
 shuffel parameter set to "True" is performed to gather the best possible Regression for this dataset.
 
 ### k-Nearest Neighbors
-For this model there is hyper-parameter tuning implemented. The following values were set for a GridsearchCV hyper-parameter
-tuning:
+For this model there is hyper-parameter tuning implemented. This model is again trained using a 6 times folded
+cross-validation with shuffel: "True". The following values are set for a GridsearchCV hyper-parameter tuning:
 1. **n_neighbors**: [3, 4, 5, 6, 7, 8]
 2. **metric**: ['minkowski', 'manhattan']
-This model is again trained using a 6 times folded cross-validation with shuffel: "True"
+
 GridSearch defined the following hyper-parameter as optimal setting:
 - n_neighbors: 6
 - metric: manhattan
@@ -95,6 +95,7 @@ Parameters which are tuned:
 2. **max_features**: ['sqrt', 'log2']
 3. **max_depth**: [2, 3, 4, 5]
 4. **criterion**: ['gini', 'entropy']
+
 GridSearch defined the following hyper-parameter as optimal setting:
 - n_estimators: 250
 - max_features: sqrt
