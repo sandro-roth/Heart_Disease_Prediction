@@ -61,7 +61,35 @@ The target variable was converted into a binary classification problem for this 
 - 1: Indicates the presence of heart disease.
 
 # Model Training
-upcoming
+This section explains the process of training the model. All models and data processing steps are performed using a
+random_state of 42. The Data is splitted in training and testing with a test size of (0.2). All models were loaded from
+the sklearn module.
+## Preprocessing
+The project includes visualization of data in the preprocessing step. For further information Check the pictures in 
+/figures. During this step the whole dataset is checked for duplicates. Furthermore, the values of each feature is 
+checked for being in the correct range and if correct dtype and for missing values. Instances of features with missing
+values are deleted from the dataset. The processed dataset is then saved in /data as a pickeld object.
+## ML
+### Logistic Regression
+This model is trained using the sklearn predefined hyper-parameters. In order to process the data a standard scaler is
+implemented to standardize the data. 
+A cross-validation method with 6 folds and a 
+shuffel parameter set to "True" is performed to gather the best possible Regression for this dataset.
+### k-Nearest Neighbors
+For this model there is hyper-parameter tuning implemented. The following values were set for a GridsearchCV hyper-parameter
+tuning:
+1. **n_neighbors**: [3, 4, 5, 6, 7, 8]
+2. **metric**: ['minkowski', 'manhattan']
+This model is again trained using a 6 times folded cross-validation with shuffel: "True"
+GridSearch defined the following hyper-parameter as optimal setting:
+
+### Random forest
+GridSearchCV is also implemented for this model while settings for KFold and shuffel stay the same as in the other models.
+Parameters which are tuned:
+1. **n_estimators**: [250, 300, 400]
+2. **max_features**: ['sqrt', 'log2']
+3. **max_depth**: [2, 3, 4, 5]
+4. **criterion**: ['gini', 'entropy']
 
 # Results
 The performance of the models is evaluated using multiple metrics.
